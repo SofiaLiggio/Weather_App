@@ -49,6 +49,14 @@ search.addEventListener("click", () => {
 
         default:
           image.src = "./images/cloud.png";
+
+      switch (key) {
+        case value:
+          break;
+
+        default:
+          break;
+
       }
     });
 });
