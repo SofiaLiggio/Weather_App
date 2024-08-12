@@ -2,6 +2,8 @@ const container = document.querySelector(".container");
 const search = document.querySelector(".search-box button");
 const weatherBox = document.querySelector(".weather-box");
 const weatherDetails = document.querySelector(".weather-details");
+const error404 = document.querySelector(".not-found");
+const cityHide = document.querySelector(".city-hide");
 
 search.addEventListener("click", () => {
   const APIKey = "98740f4ebc0d63bc0f8ba70090e5a091";
@@ -14,6 +16,15 @@ search.addEventListener("click", () => {
   )
     .then((response) => response.json())
     .then((json) => {
+      if (json.cod == "404") {
+        cityHide.textContent = city;
+        container.style.height = "400px";
+        weatherBox.classList.add("active");
+        weatherDetails.classList.add("active");
+        error404.classList.remove("active");
+        return;
+      }
+
       const image = document.querySelector(".weather-box img");
       const temperature = document.querySelector(".weather-box temperature");
       const description = document.querySelector(".weather-box description");
@@ -22,41 +33,49 @@ search.addEventListener("click", () => {
       );
       const wind = document.querySelector(".weather-details .wind span");
 
-      switch (json.weather[0].main) {
-        case "Clear":
-          image.src = "./img/clear-.png";
-          break;
+      if (cityHide.textContent == city) {
+        return;
+      } else {
+        cityHide.textContent = city;
 
-        case "Rain":
-          image.src = "./img/rain-.png";
-          break;
+        container.style.height = "555px";
+        weatherBox.classList.remove("active");
+        weatherDetails.classList.remove("active");
+        error404.classList.add("active");
 
-        case "Snow":
-          image.src = "./img/snow-.png";
-          break;
+        switch (json.weather[0].main) {
+          case "Clear":
+            image.src = "./img/clear-.png";
+            break;
 
-        case "Clouds":
-          image.src = "./img/cloud-.png";
-          break;
+          case "Rain":
+            image.src = "./img/rain-.png";
+            break;
 
-        case "Mist":
-          image.src = "./img/mist-.png";
-          break;
+          case "Snow":
+            image.src = "./img/snow-.png";
+            break;
 
-        case "Haze":
-          image.src = "./img/mist-.png";
-          break;
+          case "Clouds":
+            image.src = "./img/cloud-.png";
+            break;
 
-        default:
-          image.src = "./images/cloud.png";
+          case "Mist":
+            image.src = "./img/mist-.png";
+            break;
 
-      switch (key) {
-        case value:
-          break;
+          case "Haze":
+            image.src = "./img/mist-.png";
+            break;
 
-        default:
-          break;
+          default:
+            image.src = "./images/cloud-.png";
+        }
 
+        temperature.innerHTML = `${parseInt(json.main.temp)} <span>°C</span>`;
+        description.innerHTML = `${json.weather[0].description}`;
+        humidity.innerHTML = `${json.main.humidity}%`;
+        wind.innerHTML = `${parseInt(json.wind.speed)}Km/h`;
       }
     });
 });
