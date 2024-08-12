@@ -5,6 +5,7 @@ const weatherDetails = document.querySelector(".weather-details");
 const error404 = document.querySelector(".not-found");
 const cityHide = document.querySelector(".city-hide");
 
+
 search.addEventListener("click", () => {
   const APIKey = "98740f4ebc0d63bc0f8ba70090e5a091";
   const city = document.querySelector(".search-box input").value;
@@ -12,7 +13,7 @@ search.addEventListener("click", () => {
   if (city == "") return;
 
   fetch(
-    "https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}"
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`
   )
     .then((response) => response.json())
     .then((json) => {
@@ -24,6 +25,19 @@ search.addEventListener("click", () => {
         error404.classList.remove("active");
         return;
       }
+
+
+        container.style.height = "400px";
+        weatherBox.classList.remove("active");
+        weatherDetails.classList.remove("active");
+        error404.classList.add("active");
+        return;
+      }
+
+      container.style.height = "555px";
+      weatherBox.classList.add("active");
+      weatherDetails.classList.add("active");
+      error404.classList.remove("active");
 
       const image = document.querySelector(".weather-box img");
       const temperature = document.querySelector(".weather-box temperature");
@@ -76,6 +90,13 @@ search.addEventListener("click", () => {
         description.innerHTML = `${json.weather[0].description}`;
         humidity.innerHTML = `${json.main.humidity}%`;
         wind.innerHTML = `${parseInt(json.wind.speed)}Km/h`;
+
+        default:
+          image.src = "./images/cloud.png";
       }
+      temperature.innerHTML = `${parseInt(json.main.temp)} <span>°C</span>`;
+      description.innerHTML = `${json.weather[0].description}`;
+      humidity.innerHTML = `${json.main.humidity}%`;
+      wind.innerHTML = `${parseInt(json.wind.speed)}Km/h`;
     });
 });
