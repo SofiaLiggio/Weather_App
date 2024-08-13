@@ -96,7 +96,6 @@ body {
   visibility: hidden;
 }
 
-
 .weather-box.active,
 .weather-details.active,
 .not-found.active {
@@ -113,6 +112,7 @@ body {
   transform: translateY(0%);
   transition: transform 1s ease;
   transition-delay: 0.6s;
+}
 
 .weather-box,
 .weather-details,
@@ -216,4 +216,3 @@ body {
 .city-hide {
   display: none;
 }
-

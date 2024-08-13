@@ -5,9 +5,8 @@ const weatherDetails = document.querySelector(".weather-details");
 const error404 = document.querySelector(".not-found");
 const cityHide = document.querySelector(".city-hide");
 
-
 search.addEventListener("click", () => {
-  const APIKey = "98740f4ebc0d63bc0f8ba70090e5a091";
+  const APIKey = "807bc418a3894b069eba69f8f88c7e4b";
   const city = document.querySelector(".search-box input").value;
 
   if (city == "") return;
@@ -17,29 +16,7 @@ search.addEventListener("click", () => {
   )
     .then((response) => response.json())
     .then((json) => {
-      if (json.cod == "404") {
-        cityHide.textContent = city;
-        container.style.height = "400px";
-        weatherBox.classList.add("active");
-        weatherDetails.classList.add("active");
-        error404.classList.remove("active");
-        return;
-      }
-
-
-        container.style.height = "400px";
-        weatherBox.classList.remove("active");
-        weatherDetails.classList.remove("active");
-        error404.classList.add("active");
-        return;
-      }
-
-      container.style.height = "555px";
-      weatherBox.classList.add("active");
-      weatherDetails.classList.add("active");
-      error404.classList.remove("active");
-
-      const image = document.querySelector(".weather-box img");
+      const image = document.querySelector(".weather-box temperature");
       const temperature = document.querySelector(".weather-box temperature");
       const description = document.querySelector(".weather-box description");
       const humidity = document.querySelector(
@@ -47,56 +24,63 @@ search.addEventListener("click", () => {
       );
       const wind = document.querySelector(".weather-details .wind span");
 
-      if (cityHide.textContent == city) {
-        return;
-      } else {
-        cityHide.textContent = city;
+      switch (json.weather[0].main) {
+        case "Clear":
+          image.src = "./img/clear-.png";
+          break;
 
-        container.style.height = "555px";
-        weatherBox.classList.remove("active");
-        weatherDetails.classList.remove("active");
-        error404.classList.add("active");
+        case "Rain":
+          image.src = "./img/rain-.png";
+          break;
 
-        switch (json.weather[0].main) {
-          case "Clear":
-            image.src = "./img/clear-.png";
-            break;
+        case "Snow":
+          image.src = "./img/snow-.png";
+          break;
 
-          case "Rain":
-            image.src = "./img/rain-.png";
-            break;
+        case "Clouds":
+          image.src = "./img/cloud-.png";
+          break;
 
-          case "Snow":
-            image.src = "./img/snow-.png";
-            break;
+        case "Mist":
+          image.src = "./img/mist-.png";
+          break;
 
-          case "Clouds":
-            image.src = "./img/cloud-.png";
-            break;
-
-          case "Mist":
-            image.src = "./img/mist-.png";
-            break;
-
-          case "Haze":
-            image.src = "./img/mist-.png";
-            break;
-
-          default:
-            image.src = "./images/cloud-.png";
-        }
-
-        temperature.innerHTML = `${parseInt(json.main.temp)} <span>°C</span>`;
-        description.innerHTML = `${json.weather[0].description}`;
-        humidity.innerHTML = `${json.main.humidity}%`;
-        wind.innerHTML = `${parseInt(json.wind.speed)}Km/h`;
+        case "Haze":
+          image.src = "./img/mist-.png";
+          break;
 
         default:
-          image.src = "./images/cloud.png";
+          image.src = "./images/cloud-.png";
       }
+
       temperature.innerHTML = `${parseInt(json.main.temp)} <span>°C</span>`;
       description.innerHTML = `${json.weather[0].description}`;
       humidity.innerHTML = `${json.main.humidity}%`;
       wind.innerHTML = `${parseInt(json.wind.speed)}Km/h`;
+
+      if (json.cod == "404") {
+        cityHide.textContent = city;
+        container.style.height = "400px";
+        weatherBox.classList.add("active");
+        weatherDetails.classList.add("active");
+        error404.classList.remove("active");
+        return;
+
+        container.style.height = "555px";
+        weatherBox.classList.add("active");
+        weatherDetails.classList.add("active");
+        error404.classList.remove("active");
+
+        if (cityHide.textContent == city) {
+          return;
+        } else {
+          cityHide.textContent = city;
+
+          container.style.height = "555px";
+          weatherBox.classList.remove("active");
+          weatherDetails.classList.remove("active");
+          error404.classList.add("active");
+        }
+      }
     });
 });
